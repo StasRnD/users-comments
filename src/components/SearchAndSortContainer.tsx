@@ -7,10 +7,14 @@ export const SearchAndSortContainer = () => {
         placeholder='Search for comments'
         borderRadius='0'
         border='solid 2px grey'
-        w='100%'
       ></Input>
 
-      <Flex justifyContent='center' alignItems='center' flexWrap='wrap'>
+      <Flex
+        justifyContent='center'
+        alignItems='center'
+        flexWrap='wrap'
+        w='100%'
+      >
         <HStack spacing='2'>
           <Checkbox border='red'></Checkbox>
           <Text>Sorting by date of comments</Text>
