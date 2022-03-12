@@ -1,25 +1,18 @@
 import React from 'react';
 import { Flex, Input, Text, Checkbox, HStack } from '@chakra-ui/react';
+import { FiltersProps } from '../types/Filters';
 
-export const SearchAndSortContainer = ({
-  check,
-  setCheck,
-  valueSearchInput,
-  setValueSearchInput,
-}: {
-  check: boolean;
-  setCheck: Function;
-  valueSearchInput: string;
-  setValueSearchInput: Function;
-}) => {
-  const handleCheckBoxClick = () => {
-    setCheck(!check);
+export const SearchAndSortContainer = ({ filters, onChange }: FiltersProps) => {
+  const handleCheckBoxClick: React.ChangeEventHandler<HTMLInputElement> = (
+    evt
+  ) => {
+    onChange(evt.target.checked, 'isAscOrder');
   };
 
   const onChangeSearchInput: React.ChangeEventHandler<HTMLInputElement> = (
     evt
   ) => {
-    setValueSearchInput(evt.target.value);
+    onChange(evt.target.value, 'query');
   };
 
   return (
@@ -28,7 +21,7 @@ export const SearchAndSortContainer = ({
         placeholder='Search for comments'
         borderRadius='0'
         border='solid 2px grey'
-        value={valueSearchInput}
+        value={filters.query}
         onChange={onChangeSearchInput}
       ></Input>
 
@@ -41,7 +34,7 @@ export const SearchAndSortContainer = ({
         <HStack spacing='2'>
           <Checkbox
             border='red'
-            isChecked={check}
+            isChecked={filters.isAscOrder}
             onChange={handleCheckBoxClick}
           ></Checkbox>
           <Text>Sorting by date of comments</Text>
