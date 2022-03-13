@@ -4,13 +4,10 @@ import { SearchAndSortContainer } from './SearchAndSortContainer';
 import { ListOfComments } from './ListOfComments';
 import { allUsersComments } from '../utils.js/constans';
 import { Filters } from '../types/Filters';
+import { DateTime } from 'luxon';
 
 export const App = () => {
   const [filters, setFilters] = React.useState({ query: '', isAscOrder: true });
-
-  React.useEffect(() => {
-    console.log(filters);
-  });
 
   function onChange(value: any, filterName: keyof Filters) {
     setFilters((oldFilters) => {
@@ -23,7 +20,29 @@ export const App = () => {
       <Grid py='10' px='2'>
         <VStack spacing='10'>
           <SearchAndSortContainer onChange={onChange} filters={filters} />
-          <ListOfComments />
+          {allUsersComments
+            .sort((a, b) => {
+              if (filters.isAscOrder) {
+                return Date.parse(a.date) - Date.parse(b.date);
+              }
+              return Date.parse(b.date) - Date.parse(a.date);
+            })
+
+            // eslint-disable-next-line array-callback-return
+            .map((comment) => {
+              if (
+                comment.text.toLowerCase().includes(filters.query.toLowerCase())
+              ) {
+                return (
+                  <ListOfComments
+                    id={comment.id}
+                    text={comment.text}
+                    author={comment.author}
+                    date={comment.date}
+                  />
+                );
+              }
+            })}
         </VStack>
       </Grid>
     </ChakraProvider>

@@ -37,7 +37,7 @@ export const SearchAndSortContainer = ({ filters, onChange }: FiltersProps) => {
             isChecked={filters.isAscOrder}
             onChange={handleCheckBoxClick}
           ></Checkbox>
-          <Text>Sorting by date of comments</Text>
+          <Text>Display old comments first?</Text>
         </HStack>
       </Flex>
     </Flex>
