@@ -23,9 +23,15 @@ export const App = () => {
           {allUsersComments
             .sort((a, b) => {
               if (filters.isAscOrder) {
-                return Date.parse(a.date) - Date.parse(b.date);
+                return (
+                  DateTime.fromISO(a.date).toMillis() -
+                  DateTime.fromISO(b.date).toMillis()
+                );
               }
-              return Date.parse(b.date) - Date.parse(a.date);
+              return (
+                DateTime.fromISO(b.date).toMillis() -
+                DateTime.fromISO(a.date).toMillis()
+              );
             })
 
             // eslint-disable-next-line array-callback-return
