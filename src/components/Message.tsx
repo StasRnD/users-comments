@@ -1,16 +1,35 @@
-import React from 'react';
-import { ListItem, Text, Flex } from '@chakra-ui/react';
-import { ContentMessage } from '../types/ContentMessage';
+import { ListItem, Box, Text, UnorderedList } from '@chakra-ui/react';
 import { DateTime } from 'luxon';
 
-export const Message = ({ id, text, author, date }: ContentMessage) => {
+type allMessages = {
+  comments: Message[];
+};
+
+type Message = {
+  id: number;
+  text: string;
+  author: string;
+  date: string;
+};
+
+export const Messages = ({ comments }: allMessages) => {
+  //отобразить комментарии пользователей
+  function createListComments() {
+    return comments.map((comment: Message) => {
+      let formattedDate = DateTime.fromISO(comment.date).toFormat('t d MMMM y');
+      return (
+        <Box key={comment.id} marginBottom='5'>
+          <Text>{formattedDate}</Text>
+          <Text>{comment.text}</Text>
+          <Text>{comment.author}</Text>
+        </Box>
+      );
+    });
+  }
+
   return (
-    <Flex direction='column' gap='10'>
-      <ListItem bgColor='lightblue'>
-        <Text>{DateTime.fromISO(date).toFormat('t d MMMM y')}</Text>
-        <Text>{text}</Text>
-        <Text>{author}</Text>
-      </ListItem>
-    </Flex>
+    <UnorderedList listStyleType='none' minW='50%' maxW='80%'>
+      <ListItem bgColor='lightblue'>{createListComments()}</ListItem>
+    </UnorderedList>
   );
 };

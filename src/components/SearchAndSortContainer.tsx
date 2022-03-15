@@ -1,6 +1,11 @@
 import React from 'react';
 import { Flex, Input, Text, Checkbox, HStack } from '@chakra-ui/react';
-import { FiltersProps } from '../types/Filters';
+import { Filters } from './App';
+
+type FiltersProps = {
+  filters: Filters;
+  onChange: <T extends keyof Filters>(value: Filters[T], filterName: T) => void;
+};
 
 export const SearchAndSortContainer = ({ filters, onChange }: FiltersProps) => {
   const handleCheckBoxClick: React.ChangeEventHandler<HTMLInputElement> = (
