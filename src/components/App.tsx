@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { ComponentProps } from 'react';
 import { ChakraProvider, theme, VStack, Grid } from '@chakra-ui/react';
-import { SearchAndSortContainer } from './SearchAndSortContainer';
-import { Messages } from './Message';
-import { allUsersComments } from '../utils.js/constans';
+import { Filter } from './Filter';
+import { Messages } from './Messages';
+import { allUsersMessages } from '../utils.js/constans';
 import { DateTime } from 'luxon';
 
 export type Filters = {
@@ -16,38 +16,34 @@ export const App = () => {
     isAscOrder: true,
   });
 
-  function onChange(value: string | Boolean, filterName: keyof Filters) {
+  type FiltersOnChange = ComponentProps<typeof Filter>['onChange'];
+
+  const onChange: FiltersOnChange = (value, filterName) => {
     setFilters((oldFilters) => {
       return { ...oldFilters, [filterName]: value };
     });
-  }
+  };
 
-  //сортировка массива комментариев по дате
-  function sortingComments() {
-    return allUsersComments.sort((a, b) => {
-      let dateСonvertedToMilliseconds1 = DateTime.fromISO(a.date).toMillis();
-      let dateСonvertedToMilliseconds2 = DateTime.fromISO(b.date).toMillis();
+  const processedMessages = allUsersMessages
+    .sort((a, b) => {
+      const dateСonvertedToMillisecondsA = DateTime.fromISO(a.date).toMillis();
+      const dateСonvertedToMillisecondsB = DateTime.fromISO(b.date).toMillis();
 
       if (filters.isAscOrder) {
-        return dateСonvertedToMilliseconds1 - dateСonvertedToMilliseconds2;
+        return dateСonvertedToMillisecondsA - dateСonvertedToMillisecondsB;
       }
-      return dateСonvertedToMilliseconds2 - dateСonvertedToMilliseconds1;
-    });
-  }
-
-  //фильтрация по значению input отсортированного массива, возвращается отфильтрованный массив комментариев
-  function filterComments() {
-    return sortingComments().filter((comment) =>
-      comment.text.toLowerCase().includes(filters.query.toLowerCase())
+      return dateСonvertedToMillisecondsB - dateСonvertedToMillisecondsA;
+    })
+    .filter((message) =>
+      message.text.toLowerCase().includes(filters.query.toLowerCase())
     );
-  }
 
   return (
     <ChakraProvider theme={theme}>
       <Grid py='10' px='2'>
         <VStack spacing='10'>
-          <SearchAndSortContainer onChange={onChange} filters={filters} />
-          <Messages comments={filterComments()} />
+          <Filter onChange={onChange} filters={filters} />
+          <Messages messages={processedMessages} />
         </VStack>
       </Grid>
     </ChakraProvider>

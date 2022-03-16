@@ -7,7 +7,7 @@ type FiltersProps = {
   onChange: <T extends keyof Filters>(value: Filters[T], filterName: T) => void;
 };
 
-export const SearchAndSortContainer = ({ filters, onChange }: FiltersProps) => {
+export const Filter = ({ filters, onChange }: FiltersProps) => {
   const handleCheckBoxClick: React.ChangeEventHandler<HTMLInputElement> = (
     evt
   ) => {

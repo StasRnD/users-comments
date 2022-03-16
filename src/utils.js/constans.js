@@ -1,4 +1,4 @@
-export const allUsersComments = [
+export const allUsersMessages = [
     {
         id: 1,
         author: 'Alex',
