@@ -8,7 +8,6 @@ type FiltersProps = {
 };
 
 export const Filter = ({ filters, onChange }: FiltersProps) => {
-  console.log(filters);
   const handleCheckBoxClick: React.ChangeEventHandler<HTMLInputElement> = (
     evt
   ) => {
