@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Input, Text, Checkbox, HStack } from '@chakra-ui/react';
+import { Flex, Input, Text, Checkbox, HStack, Select } from '@chakra-ui/react';
 import { Filters } from './App';
 
 type FiltersProps = {
@@ -8,6 +8,7 @@ type FiltersProps = {
 };
 
 export const Filter = ({ filters, onChange }: FiltersProps) => {
+  console.log(filters);
   const handleCheckBoxClick: React.ChangeEventHandler<HTMLInputElement> = (
     evt
   ) => {
@@ -20,8 +21,14 @@ export const Filter = ({ filters, onChange }: FiltersProps) => {
     onChange(evt.target.value, 'query');
   };
 
+  const onChangeSortingMethod: React.ChangeEventHandler<HTMLSelectElement> = (
+    evt
+  ) => {
+    onChange(evt.target.value, 'sortingMethod');
+  };
+
   return (
-    <Flex flexWrap='wrap'>
+    <Flex flexWrap='wrap' rowGap='5'>
       <Input
         placeholder='Search for comments'
         borderRadius='0'
@@ -29,7 +36,12 @@ export const Filter = ({ filters, onChange }: FiltersProps) => {
         value={filters.query}
         onChange={onChangeSearchInput}
       ></Input>
-
+      <Select onChange={onChangeSortingMethod}>
+        <option hidden>Sorting selection</option>
+        <option>Sort by rating</option>
+        <option>Sort by date</option>
+        <option>Sorting by the author of the message</option>
+      </Select>
       <Flex
         justifyContent='center'
         alignItems='center'
