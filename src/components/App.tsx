@@ -3,7 +3,7 @@ import { ChakraProvider, theme, VStack, Grid } from '@chakra-ui/react';
 import { Filter } from './Filter';
 import { Messages } from './Messages';
 import { allUsersMessages } from '../utils.js/constans';
-import _ from 'lodash';
+import orderBy from 'lodash.orderby';
 
 export type Filters = {
   query: string;
@@ -26,52 +26,20 @@ export const App = () => {
     });
   };
 
-  const sortByDate = () => {
-    if (filters.isAscOrder) {
-      return _.orderBy(allUsersMessages, ['date'], ['asc']);
-    }
-    return _.orderBy(allUsersMessages, ['date'], ['desc']);
-  };
-
-  const sortByRating = () => {
-    if (filters.isAscOrder) {
-      return _.orderBy(allUsersMessages, ['rating'], ['asc']);
-    }
-    return _.orderBy(allUsersMessages, ['rating'], ['desc']);
-  };
-
-  const sortByAuthorName = () => {
-    if (filters.isAscOrder) {
-      return _.orderBy(allUsersMessages, ['author'], ['asc']);
-    }
-    return _.orderBy(allUsersMessages, ['author'], ['desc']);
-  };
-
-  let processedMessages = [...allUsersMessages];
-  const processMessages = () => {
-    if (filters.sortingField === 'date') {
-      processedMessages = sortByDate();
-    }
-
-    if (filters.sortingField === 'rating') {
-      processedMessages = sortByRating();
-    }
-
-    if (filters.sortingField === 'author') {
-      processedMessages = sortByAuthorName();
-    }
-
-    return processedMessages.filter((message) =>
-      message.text.toLowerCase().includes(filters.query.toLowerCase())
-    );
-  };
+  const messages = orderBy(
+    allUsersMessages,
+    filters.sortingField,
+    filters.isAscOrder ? ['asc'] : ['desc']
+  ).filter((message) =>
+    message.text.toLowerCase().includes(filters.query.toLowerCase())
+  );
 
   return (
     <ChakraProvider theme={theme}>
       <Grid py='10' px='2'>
         <VStack spacing='10'>
           <Filter onChange={onChange} filters={filters} />
-          <Messages messages={processMessages()} />
+          <Messages messages={messages} />
         </VStack>
       </Grid>
     </ChakraProvider>
