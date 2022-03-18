@@ -7,6 +7,7 @@ type allMessages = {
 
 type Message = {
   id: number;
+  rating: number;
   text: string;
   author: string;
   date: string;
@@ -28,6 +29,7 @@ export const Messages = ({ messages }: allMessages) => {
             <Text>{message.date}</Text>
             <Text>{message.text}</Text>
             <Text>{message.author}</Text>
+            <Text>Рейтинг {message.rating}</Text>
           </Box>
         ))}
       </ListItem>
