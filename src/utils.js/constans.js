@@ -1,4 +1,4 @@
-export const allUsersMessages = [
+const allUsersMessages = [
     {
         id: 1,
         rating: 2,
@@ -35,3 +35,23 @@ export const allUsersMessages = [
         text: 'Мастер педикюра Анастасия при проведении аппаратного педикюра изранила ногу, затем накричала на меня, сказав, что я больная и без справки она меня обслуживать не будет. Попросила жалобную книгу — пришло аж 3 администратора, 20мин ищут одну жалобную книгу.Проросила документы на обучение Анастасии и ее мед книжку. Тоже не несут. Жду'
     }
 ]
+
+const sortingOptions = [
+    {
+      key: 1,
+      filt: 'date',
+      label: 'Sort by date',
+    },
+    {
+      key: 2,
+      filt: 'rating',
+      label: 'Sort by raiting',
+    },
+    {
+      key: 3,
+      filt: 'author',
+      label: 'Sorting by author name of message',
+    },
+  ];
+
+  export { sortingOptions, allUsersMessages}

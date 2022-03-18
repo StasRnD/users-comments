@@ -3,19 +3,19 @@ import { ChakraProvider, theme, VStack, Grid } from '@chakra-ui/react';
 import { Filter } from './Filter';
 import { Messages } from './Messages';
 import { allUsersMessages } from '../utils.js/constans';
-import { DateTime } from 'luxon';
+import _ from 'lodash';
 
 export type Filters = {
   query: string;
   isAscOrder: boolean;
-  sortingMethod: string;
+  sortingFilt: string;
 };
 
 export const App = () => {
   const [filters, setFilters] = React.useState({
     query: '',
     isAscOrder: false,
-    sortingMethod: '',
+    sortingFilt: '',
   });
 
   type FiltersOnChange = ComponentProps<typeof Filter>['onChange'];
@@ -27,57 +27,41 @@ export const App = () => {
   };
 
   const sortByDate = () => {
-    return allUsersMessages.sort((a, b) => {
-      const dateСonvertedToMillisecondsA = DateTime.fromISO(a.date).toMillis();
-      const dateСonvertedToMillisecondsB = DateTime.fromISO(b.date).toMillis();
-      if (filters.isAscOrder) {
-        return dateСonvertedToMillisecondsA - dateСonvertedToMillisecondsB;
-      }
-      return dateСonvertedToMillisecondsB - dateСonvertedToMillisecondsA;
-    });
+    if (filters.isAscOrder) {
+      return _.orderBy(allUsersMessages, ['date'], ['asc']);
+    }
+    return _.orderBy(allUsersMessages, ['date'], ['desc']);
   };
 
   const sortByRating = () => {
-    return allUsersMessages.sort((a, b) => {
-      const userRatingA = a.rating;
-      const userRatingB = b.rating;
-      if (filters.isAscOrder) {
-        return userRatingA - userRatingB;
-      }
-      return userRatingB - userRatingA;
-    });
+    if (filters.isAscOrder) {
+      return _.orderBy(allUsersMessages, ['rating'], ['asc']);
+    }
+    return _.orderBy(allUsersMessages, ['rating'], ['desc']);
   };
 
   const sortByAuthorName = () => {
     if (filters.isAscOrder) {
-      return allUsersMessages.sort((a, b) => {
-        if (a.author > b.author) return 1;
-        return -1;
-      });
+      return _.orderBy(allUsersMessages, ['author'], ['asc']);
     }
-
-    if (!filters.isAscOrder) {
-      return allUsersMessages.sort((a, b) => {
-        if (a.author > b.author) return -1;
-        return 1;
-      });
-    }
+    return _.orderBy(allUsersMessages, ['author'], ['desc']);
   };
 
-  const processedMessages = () => {
-    if (filters.sortingMethod === 'Sort by date') {
-      sortByDate();
+  let processedMessages = [...allUsersMessages];
+  const processMessages = () => {
+    if (filters.sortingFilt === 'date') {
+      processedMessages = sortByDate();
     }
 
-    if (filters.sortingMethod === 'Sort by rating') {
-      sortByRating();
+    if (filters.sortingFilt === 'rating') {
+      processedMessages = sortByRating();
     }
 
-    if (filters.sortingMethod === 'Sorting by the author of the message') {
-      sortByAuthorName();
+    if (filters.sortingFilt === 'author') {
+      processedMessages = sortByAuthorName();
     }
 
-    return allUsersMessages.filter((message) =>
+    return processedMessages.filter((message) =>
       message.text.toLowerCase().includes(filters.query.toLowerCase())
     );
   };
@@ -87,7 +71,7 @@ export const App = () => {
       <Grid py='10' px='2'>
         <VStack spacing='10'>
           <Filter onChange={onChange} filters={filters} />
-          <Messages messages={processedMessages()} />
+          <Messages messages={processMessages()} />
         </VStack>
       </Grid>
     </ChakraProvider>
