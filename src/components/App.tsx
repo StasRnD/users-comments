@@ -8,14 +8,14 @@ import _ from 'lodash';
 export type Filters = {
   query: string;
   isAscOrder: boolean;
-  sortingFilt: string;
+  sortingField: 'date' | 'rating' | 'author';
 };
 
 export const App = () => {
   const [filters, setFilters] = React.useState({
     query: '',
     isAscOrder: false,
-    sortingFilt: '',
+    sortingField: '' as Filters['sortingField'],
   });
 
   type FiltersOnChange = ComponentProps<typeof Filter>['onChange'];
@@ -49,15 +49,15 @@ export const App = () => {
 
   let processedMessages = [...allUsersMessages];
   const processMessages = () => {
-    if (filters.sortingFilt === 'date') {
+    if (filters.sortingField === 'date') {
       processedMessages = sortByDate();
     }
 
-    if (filters.sortingFilt === 'rating') {
+    if (filters.sortingField === 'rating') {
       processedMessages = sortByRating();
     }
 
-    if (filters.sortingFilt === 'author') {
+    if (filters.sortingField === 'author') {
       processedMessages = sortByAuthorName();
     }
 

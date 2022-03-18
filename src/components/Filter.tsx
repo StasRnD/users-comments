@@ -23,7 +23,7 @@ export const Filter = ({ filters, onChange }: FiltersProps) => {
   const onChangeSortingMethod: React.ChangeEventHandler<HTMLSelectElement> = (
     evt
   ) => {
-    onChange(evt.target.value, 'sortingFilt');
+    onChange(evt.target.value as 'date' | 'rating' | 'author', 'sortingField');
   };
 
   return (
