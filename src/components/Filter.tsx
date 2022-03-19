@@ -11,6 +11,7 @@ import {
 import { ArrowUpIcon } from '@chakra-ui/icons';
 import { Filters } from './App';
 import { sortingOptions } from '../utils.js/constans';
+
 type FiltersProps = {
   filters: Filters;
   onChange: <T extends keyof Filters>(value: Filters[T], filterName: T) => void;
@@ -35,6 +36,15 @@ export const Filter = ({ filters, onChange }: FiltersProps) => {
     onChange(evt.target.value as 'date' | 'rating' | 'author', 'sortingField');
   };
 
+  const onChangeFilterDateInputs: React.ChangeEventHandler<HTMLInputElement> = (
+    evt
+  ) => {
+    onChange(
+      evt.target.value,
+      evt.target.name as 'filterStartDate' | 'filterEndDate'
+    );
+  };
+
   return (
     <Flex flexWrap='wrap' rowGap='5'>
       <Input
@@ -44,6 +54,29 @@ export const Filter = ({ filters, onChange }: FiltersProps) => {
         value={filters.query}
         onChange={onChangeSearchInput}
       ></Input>
+      <Flex w='100%' alignItems='center'>
+        <Input
+          type='text'
+          borderRadius='0'
+          border='solid 2px grey'
+          placeholder='Date with(dd.mm.yyyy)'
+          name='filterStartDate'
+          maxLength={10}
+          value={filters.filterStartDate}
+          onInput={onChangeFilterDateInputs}
+        />
+        <Input
+          type='text'
+          borderRadius='0'
+          border='solid 2px grey'
+          placeholder='Date before(dd.mm.yyyy)'
+          borderLeft='none'
+          name='filterEndDate'
+          maxLength={10}
+          value={filters.filterEndDate}
+          onChange={onChangeFilterDateInputs}
+        />
+      </Flex>
       <Select onChange={onChangeSortingMethod}>
         <option hidden>Sorting selection</option>
         {sortingOptions.map((option) => (

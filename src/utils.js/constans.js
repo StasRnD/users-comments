@@ -54,4 +54,6 @@ const sortingOptions = [
     },
   ];
 
-  export { sortingOptions, allUsersMessages}
+  const regexp = /^\d\d.\d\d.\d\d\d\d$/;
+
+  export { sortingOptions, allUsersMessages, regexp }
