@@ -61,9 +61,9 @@ export const Filter = ({ filters, onChange }: FiltersProps) => {
         <HStack spacing='2'>
           <Box
             borderRadius='2px'
-            border='1px solid lightblue'
+            outline='1px solid lightblue'
             position='relative'
-            w='30%'
+            w='100px'
             _active={{
               bg: 'lightblue',
             }}
