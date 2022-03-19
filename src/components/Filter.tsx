@@ -1,5 +1,14 @@
 import React from 'react';
-import { Flex, Input, Text, Checkbox, HStack, Select } from '@chakra-ui/react';
+import {
+  Flex,
+  Input,
+  Text,
+  Checkbox,
+  HStack,
+  Select,
+  Box,
+} from '@chakra-ui/react';
+import { ArrowUpIcon } from '@chakra-ui/icons';
 import { Filters } from './App';
 import { sortingOptions } from '../utils.js/constans';
 type FiltersProps = {
@@ -50,12 +59,33 @@ export const Filter = ({ filters, onChange }: FiltersProps) => {
         w='100%'
       >
         <HStack spacing='2'>
-          <Checkbox
-            border='red'
-            isChecked={filters.isAscOrder}
+          <Box
+            borderRadius='2px'
+            border='1px solid lightblue'
+            position='relative'
+            w='30%'
+            _active={{
+              bg: 'lightblue',
+            }}
             onChange={handleCheckBoxClick}
-          ></Checkbox>
-          <Text>Display old comments first?</Text>
+          >
+            <ArrowUpIcon
+              position='absolute'
+              top='0'
+              left='0'
+              w='100%'
+              h='100%'
+            ></ArrowUpIcon>
+
+            <Checkbox
+              isChecked={filters.isAscOrder}
+              opacity='0'
+              w='100%'
+              h='25px'
+            ></Checkbox>
+          </Box>
+
+          <Text>Display comments in reverse order</Text>
         </HStack>
       </Flex>
     </Flex>
