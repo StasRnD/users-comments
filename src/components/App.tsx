@@ -1,17 +1,21 @@
 import React, { ComponentProps } from 'react';
-import { ChakraProvider, theme, VStack, Grid } from '@chakra-ui/react';
+import { ChakraProvider, theme, VStack, Grid, Button } from '@chakra-ui/react';
 import { Filter } from './Filter';
 import { Messages } from './Messages';
 import { allUsersMessages } from '../utils.js/constans';
 import { DateTime } from 'luxon';
-import orderBy from 'lodash.orderby';
+import orderBy from 'lodash/orderBy';
+import set from 'lodash/set';
+import cloneDeep from 'lodash/cloneDeep';
 
 export type Filters = {
   query: string;
   isAscOrder: boolean;
   sortingField: 'date' | 'rating' | 'author';
-  filterStartDate: string;
-  filterEndDate: string;
+  date: {
+    from: string;
+    to: string;
+  };
 };
 
 export const App = () => {
@@ -19,29 +23,26 @@ export const App = () => {
     query: '',
     isAscOrder: false,
     sortingField: '' as Filters['sortingField'],
-    filterStartDate: '',
-    filterEndDate: '',
+    date: {
+      from: '',
+      to: '',
+    },
   });
+
+  const [defaultFilters] = React.useState(cloneDeep(filters));
 
   type FiltersOnChange = ComponentProps<typeof Filter>['onChange'];
 
   const onChange: FiltersOnChange = (value, filterName) => {
-    setFilters((oldFilters) => {
-      return { ...oldFilters, [filterName]: value };
-    });
+    setFilters((oldFilters) => set({ ...oldFilters }, filterName, value));
   };
 
   const comparingTheMessageDateWithTheFilteringDates = (date: string) => {
-    const messageDateInMilliseconds = DateTime.fromISO(date).toMillis();
+    const dateTime = DateTime.fromISO(date);
+
     return (
-      messageDateInMilliseconds >
-        DateTime.fromISO(
-          filters.filterStartDate.split('.').reverse().join('-')
-        ).toMillis() &&
-      messageDateInMilliseconds <
-        DateTime.fromISO(
-          filters.filterEndDate.split('.').reverse().join('-')
-        ).toMillis()
+      dateTime >= DateTime.fromISO(filters.date.from) &&
+      dateTime <= DateTime.fromISO(filters.date.to)
     );
   };
 
@@ -54,16 +55,21 @@ export const App = () => {
       message.text.toLowerCase().includes(filters.query.toLowerCase())
     )
     .filter((message) =>
-      filters.filterStartDate.length > 9 && filters.filterEndDate.length > 9
+      filters.date.from.length && filters.date.to.length
         ? comparingTheMessageDateWithTheFilteringDates(message.date)
         : message
     );
+
+  const resetFilter = () => setFilters(defaultFilters);
 
   return (
     <ChakraProvider theme={theme}>
       <Grid py='10' px='2'>
         <VStack spacing='10'>
           <Filter onChange={onChange} filters={filters} />
+          <Button type='button' onClick={resetFilter}>
+            Reset all filters
+          </Button>
           <Messages messages={messages} />
         </VStack>
       </Grid>

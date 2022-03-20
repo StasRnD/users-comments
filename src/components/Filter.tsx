@@ -9,12 +9,15 @@ import {
   Box,
 } from '@chakra-ui/react';
 import { ArrowUpIcon } from '@chakra-ui/icons';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import { Filters } from './App';
 import { sortingOptions } from '../utils.js/constans';
+import { DateTime } from 'luxon';
 
 type FiltersProps = {
   filters: Filters;
-  onChange: <T extends keyof Filters>(value: Filters[T], filterName: T) => void;
+  onChange: (value: any, filterName: string) => void;
 };
 
 export const Filter = ({ filters, onChange }: FiltersProps) => {
@@ -36,12 +39,17 @@ export const Filter = ({ filters, onChange }: FiltersProps) => {
     onChange(evt.target.value as 'date' | 'rating' | 'author', 'sortingField');
   };
 
-  const onChangeFilterDateInputs: React.ChangeEventHandler<HTMLInputElement> = (
-    evt
-  ) => {
+  const onChangeStartDateForFilter = (date: Date | null) => {
     onChange(
-      evt.target.value,
-      evt.target.name as 'filterStartDate' | 'filterEndDate'
+      date !== null ? DateTime.fromJSDate(date).toISO() : null,
+      'date.from'
+    );
+  };
+
+  const onChangeEndDateForFilter = (date: Date | null) => {
+    onChange(
+      date !== null ? DateTime.fromJSDate(date).toISO() : null,
+      'date.to'
     );
   };
 
@@ -54,27 +62,25 @@ export const Filter = ({ filters, onChange }: FiltersProps) => {
         value={filters.query}
         onChange={onChangeSearchInput}
       ></Input>
+
       <Flex w='100%' alignItems='center'>
-        <Input
-          type='text'
-          borderRadius='0'
-          border='solid 2px grey'
-          placeholder='Date with(dd.mm.yyyy)'
-          name='filterStartDate'
-          maxLength={10}
-          value={filters.filterStartDate}
-          onInput={onChangeFilterDateInputs}
+        <DatePicker
+          value={
+            filters.date.from
+              ? DateTime.fromISO(filters.date.from).toLocaleString()
+              : filters.date.from
+          }
+          placeholderText='введите дату начало'
+          onChange={onChangeStartDateForFilter}
         />
-        <Input
-          type='text'
-          borderRadius='0'
-          border='solid 2px grey'
-          placeholder='Date before(dd.mm.yyyy)'
-          borderLeft='none'
-          name='filterEndDate'
-          maxLength={10}
-          value={filters.filterEndDate}
-          onChange={onChangeFilterDateInputs}
+        <DatePicker
+          value={
+            filters.date.to
+              ? DateTime.fromISO(filters.date.to).toLocaleString()
+              : filters.date.to
+          }
+          placeholderText='введите дату конец'
+          onChange={onChangeEndDateForFilter}
         />
       </Flex>
       <Select onChange={onChangeSortingMethod}>
