@@ -53,6 +53,14 @@ export const Filter = ({ filters, onChange }: FiltersProps) => {
     );
   };
 
+  const valueStartDateForFilters = filters.date.from
+    ? DateTime.fromISO(filters.date.from).toLocaleString()
+    : filters.date.from;
+
+  const valueEndDateForFilters = filters.date.to
+    ? DateTime.fromISO(filters.date.to).toLocaleString()
+    : filters.date.to;
+
   return (
     <Flex flexWrap='wrap' rowGap='5'>
       <Input
@@ -65,20 +73,12 @@ export const Filter = ({ filters, onChange }: FiltersProps) => {
 
       <Flex w='100%' alignItems='center'>
         <DatePicker
-          value={
-            filters.date.from
-              ? DateTime.fromISO(filters.date.from).toLocaleString()
-              : filters.date.from
-          }
+          value={valueStartDateForFilters}
           placeholderText='введите дату начало'
           onChange={onChangeStartDateForFilter}
         />
         <DatePicker
-          value={
-            filters.date.to
-              ? DateTime.fromISO(filters.date.to).toLocaleString()
-              : filters.date.to
-          }
+          value={valueEndDateForFilters}
           placeholderText='введите дату конец'
           onChange={onChangeEndDateForFilter}
         />

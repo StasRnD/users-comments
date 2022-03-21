@@ -34,7 +34,7 @@ export const App = () => {
   type FiltersOnChange = ComponentProps<typeof Filter>['onChange'];
 
   const onChange: FiltersOnChange = (value, filterName) => {
-    setFilters((oldFilters) => set({ ...oldFilters }, filterName, value));
+    setFilters((oldFilters) => set(cloneDeep(oldFilters), filterName, value));
   };
 
   const comparingTheMessageDateWithTheFilteringDates = (date: string) => {
@@ -60,7 +60,7 @@ export const App = () => {
         : message
     );
 
-  const resetFilter = () => setFilters(defaultFilters);
+  const resetFilter = () => setFilters(cloneDeep(defaultFilters));
 
   return (
     <ChakraProvider theme={theme}>
