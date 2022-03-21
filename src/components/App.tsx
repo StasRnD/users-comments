@@ -18,23 +18,25 @@ export type Filters = {
   };
 };
 
-export const App = () => {
-  const [filters, setFilters] = React.useState({
-    query: '',
-    isAscOrder: false,
-    sortingField: '' as Filters['sortingField'],
-    date: {
-      from: '',
-      to: '',
-    },
-  });
+const defaultFilters = {
+  query: '',
+  isAscOrder: false,
+  sortingField: '' as Filters['sortingField'],
+  date: {
+    from: '',
+    to: '',
+  },
+};
 
-  const [defaultFilters] = React.useState(cloneDeep(filters));
+export const App = () => {
+  const [filters, setFilters] = React.useState(defaultFilters);
 
   type FiltersOnChange = ComponentProps<typeof Filter>['onChange'];
 
   const onChange: FiltersOnChange = (value, filterName) => {
-    setFilters((oldFilters) => set(cloneDeep(oldFilters), filterName, value));
+    setFilters((oldFilters) =>
+      set(deepСopyOfTheFilteringObject(oldFilters), filterName, value)
+    );
   };
 
   const comparingTheMessageDateWithTheFilteringDates = (date: string) => {
@@ -55,12 +57,14 @@ export const App = () => {
       message.text.toLowerCase().includes(filters.query.toLowerCase())
     )
     .filter((message) =>
-      filters.date.from.length && filters.date.to.length
+      filters.date.from && filters.date.to
         ? comparingTheMessageDateWithTheFilteringDates(message.date)
         : message
     );
+  const deepСopyOfTheFilteringObject = (filters: Filters) => cloneDeep(filters);
 
-  const resetFilter = () => setFilters(cloneDeep(defaultFilters));
+  const resetFilter = () =>
+    setFilters(deepСopyOfTheFilteringObject(defaultFilters));
 
   return (
     <ChakraProvider theme={theme}>

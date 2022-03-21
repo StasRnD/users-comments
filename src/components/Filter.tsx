@@ -53,13 +53,8 @@ export const Filter = ({ filters, onChange }: FiltersProps) => {
     );
   };
 
-  const valueStartDateForFilters = filters.date.from
-    ? DateTime.fromISO(filters.date.from).toLocaleString()
-    : filters.date.from;
-
-  const valueEndDateForFilters = filters.date.to
-    ? DateTime.fromISO(filters.date.to).toLocaleString()
-    : filters.date.to;
+  const valueDateForDatePicker = (date: string) =>
+    date ? new Date(date) : null;
 
   return (
     <Flex flexWrap='wrap' rowGap='5'>
@@ -73,14 +68,16 @@ export const Filter = ({ filters, onChange }: FiltersProps) => {
 
       <Flex w='100%' alignItems='center'>
         <DatePicker
-          value={valueStartDateForFilters}
-          placeholderText='введите дату начало'
+          dateFormat='dd.MM.yyyy'
+          selected={valueDateForDatePicker(filters.date.from)}
           onChange={onChangeStartDateForFilter}
+          placeholderText='Starting date'
         />
         <DatePicker
-          value={valueEndDateForFilters}
-          placeholderText='введите дату конец'
+          dateFormat='dd.MM.yyyy'
+          selected={valueDateForDatePicker(filters.date.to)}
           onChange={onChangeEndDateForFilter}
+          placeholderText='End date'
         />
       </Flex>
       <Select onChange={onChangeSortingMethod}>
