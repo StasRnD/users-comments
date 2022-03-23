@@ -17,7 +17,7 @@ export const Messages = ({ messages }: allMessages) => {
   const processedMessages = messages.map((message: Message) => {
     return {
       ...message,
-      date: DateTime.fromISO(message.date).toFormat('t d MMMM y'),
+      date: DateTime.fromISO(message.date).toFormat('dd.MM.y'),
     };
   });
 

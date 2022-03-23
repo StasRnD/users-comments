@@ -54,4 +54,6 @@ const sortingOptions = [
     },
   ];
 
-  export { sortingOptions, allUsersMessages}
+  
+
+  export { sortingOptions, allUsersMessages }
