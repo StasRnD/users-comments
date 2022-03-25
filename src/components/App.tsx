@@ -21,17 +21,27 @@ export type Filters = {
 const url = new URL(document.location.href);
 
 const defaultFilters = {
-  query: url.searchParams.get('query') || '',
-  isAscOrder: url.searchParams.get('isAscOrder') === 'true' ? true : false,
+  query: '',
+  isAscOrder: false,
   sortingField: '' as Filters['sortingField'],
   date: {
-    from: url.searchParams.get('date.from') || '',
-    to: url.searchParams.get('date.to') || '',
+    from: '',
+    to: '',
   },
 };
 
 export const App = () => {
-  const [filters, setFilters] = React.useState(defaultFilters);
+  const filterCreatedDependingOnTheUrl = {
+    query: url.searchParams.get('query') || '',
+    isAscOrder: url.searchParams.get('isAscOrder') === 'true' ? true : false,
+    sortingField: '' as Filters['sortingField'],
+    date: {
+      from: url.searchParams.get('date.from') || '',
+      to: url.searchParams.get('date.to') || '',
+    },
+  };
+
+  const [filters, setFilters] = React.useState(filterCreatedDependingOnTheUrl);
 
   type FiltersOnChange = ComponentProps<typeof Filter>['onChange'];
 
@@ -68,9 +78,11 @@ export const App = () => {
     );
   const deepСopyOfTheFilteringObject = (filters: Filters) => cloneDeep(filters);
 
-  const resetFilter = () =>
+  const resetFilter = () => {
+    window.history.pushState(null, '', '/');
+    url.search = '';
     setFilters(deepСopyOfTheFilteringObject(defaultFilters));
-
+  };
   return (
     <ChakraProvider theme={theme}>
       <Grid py='10' px='2'>
