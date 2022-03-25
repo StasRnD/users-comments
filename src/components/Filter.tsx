@@ -7,6 +7,7 @@ import {
   HStack,
   Select,
   Box,
+  Button,
 } from '@chakra-ui/react';
 import { ArrowUpIcon } from '@chakra-ui/icons';
 import DatePicker from 'react-datepicker';
@@ -18,9 +19,10 @@ import { DateTime } from 'luxon';
 type FiltersProps = {
   filters: Filters;
   onChange: (value: any, filterName: string) => void;
+  onResetFilters: () => void;
 };
 
-export const Filter = ({ filters, onChange }: FiltersProps) => {
+export const Filter = ({ filters, onChange, onResetFilters }: FiltersProps) => {
   const handleCheckBoxClick: React.ChangeEventHandler<HTMLInputElement> = (
     evt
   ) => {
@@ -122,6 +124,9 @@ export const Filter = ({ filters, onChange }: FiltersProps) => {
           </Box>
 
           <Text>Display comments in reverse order</Text>
+          <Button type='button' onClick={onResetFilters}>
+            Reset all filters
+          </Button>
         </HStack>
       </Flex>
     </Flex>

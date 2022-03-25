@@ -1,5 +1,5 @@
 import React, { ComponentProps } from 'react';
-import { ChakraProvider, theme, VStack, Grid, Button } from '@chakra-ui/react';
+import { ChakraProvider, theme, VStack, Grid } from '@chakra-ui/react';
 import { Filter } from './Filter';
 import { Messages } from './Messages';
 import { allUsersMessages } from '../utils.js/constans';
@@ -18,13 +18,15 @@ export type Filters = {
   };
 };
 
+const url = new URL(document.location.href);
+
 const defaultFilters = {
-  query: '',
-  isAscOrder: false,
+  query: url.searchParams.get('query') || '',
+  isAscOrder: url.searchParams.get('isAscOrder') === 'true' ? true : false,
   sortingField: '' as Filters['sortingField'],
   date: {
-    from: '',
-    to: '',
+    from: url.searchParams.get('date.from') || '',
+    to: url.searchParams.get('date.to') || '',
   },
 };
 
@@ -37,6 +39,9 @@ export const App = () => {
     setFilters((oldFilters) =>
       set(deepСopyOfTheFilteringObject(oldFilters), filterName, value)
     );
+
+    url.searchParams.set(filterName, value);
+    window.history.pushState(null, '', url.search);
   };
 
   const comparingTheMessageDateWithTheFilteringDates = (date: string) => {
@@ -70,10 +75,11 @@ export const App = () => {
     <ChakraProvider theme={theme}>
       <Grid py='10' px='2'>
         <VStack spacing='10'>
-          <Filter onChange={onChange} filters={filters} />
-          <Button type='button' onClick={resetFilter}>
-            Reset all filters
-          </Button>
+          <Filter
+            onChange={onChange}
+            filters={filters}
+            onResetFilters={resetFilter}
+          />
           <Messages messages={messages} />
         </VStack>
       </Grid>
