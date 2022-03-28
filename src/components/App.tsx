@@ -46,9 +46,7 @@ export const App = () => {
   type FiltersOnChange = ComponentProps<typeof Filter>['onChange'];
 
   const onChange: FiltersOnChange = (value, filterName) => {
-    setFilters((oldFilters) =>
-      set(deepСopyOfTheFilteringObject(oldFilters), filterName, value)
-    );
+    setFilters((oldFilters) => set(cloneDeep(oldFilters), filterName, value));
 
     url.searchParams.set(filterName, value);
     window.history.pushState(null, '', url.search);
@@ -76,12 +74,11 @@ export const App = () => {
         ? comparingTheMessageDateWithTheFilteringDates(message.date)
         : message
     );
-  const deepСopyOfTheFilteringObject = (filters: Filters) => cloneDeep(filters);
 
   const resetFilter = () => {
     window.history.pushState(null, '', '/');
     url.search = '';
-    setFilters(deepСopyOfTheFilteringObject(defaultFilters));
+    setFilters(cloneDeep(defaultFilters));
   };
   return (
     <ChakraProvider theme={theme}>
