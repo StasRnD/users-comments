@@ -1,5 +1,5 @@
 import React, { ComponentProps } from 'react';
-import { ChakraProvider, theme, VStack, Grid, Button } from '@chakra-ui/react';
+import { ChakraProvider, theme, VStack, Grid } from '@chakra-ui/react';
 import { Filter } from './Filter';
 import { Messages } from './Messages';
 import { allUsersMessages } from '../utils.js/constans';
@@ -18,6 +18,8 @@ export type Filters = {
   };
 };
 
+const url = new URL(document.location.href);
+
 const defaultFilters = {
   query: '',
   isAscOrder: false,
@@ -29,14 +31,25 @@ const defaultFilters = {
 };
 
 export const App = () => {
-  const [filters, setFilters] = React.useState(defaultFilters);
+  const filterCreatedDependingOnTheUrl = {
+    query: url.searchParams.get('query') || '',
+    isAscOrder: url.searchParams.get('isAscOrder') === 'true' ? true : false,
+    sortingField: '' as Filters['sortingField'],
+    date: {
+      from: url.searchParams.get('date.from') || '',
+      to: url.searchParams.get('date.to') || '',
+    },
+  };
+
+  const [filters, setFilters] = React.useState(filterCreatedDependingOnTheUrl);
 
   type FiltersOnChange = ComponentProps<typeof Filter>['onChange'];
 
   const onChange: FiltersOnChange = (value, filterName) => {
-    setFilters((oldFilters) =>
-      set(deepСopyOfTheFilteringObject(oldFilters), filterName, value)
-    );
+    setFilters((oldFilters) => set(cloneDeep(oldFilters), filterName, value));
+
+    url.searchParams.set(filterName, value);
+    window.history.pushState(null, '', url.search);
   };
 
   const comparingTheMessageDateWithTheFilteringDates = (date: string) => {
@@ -61,19 +74,21 @@ export const App = () => {
         ? comparingTheMessageDateWithTheFilteringDates(message.date)
         : message
     );
-  const deepСopyOfTheFilteringObject = (filters: Filters) => cloneDeep(filters);
 
-  const resetFilter = () =>
-    setFilters(deepСopyOfTheFilteringObject(defaultFilters));
-
+  const resetFilter = () => {
+    window.history.pushState(null, '', '/');
+    url.search = '';
+    setFilters(cloneDeep(defaultFilters));
+  };
   return (
     <ChakraProvider theme={theme}>
       <Grid py='10' px='2'>
         <VStack spacing='10'>
-          <Filter onChange={onChange} filters={filters} />
-          <Button type='button' onClick={resetFilter}>
-            Reset all filters
-          </Button>
+          <Filter
+            onChange={onChange}
+            filters={filters}
+            onResetFilters={resetFilter}
+          />
           <Messages messages={messages} />
         </VStack>
       </Grid>
