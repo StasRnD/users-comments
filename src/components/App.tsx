@@ -47,7 +47,6 @@ export const App = () => {
 
   const onChange: FiltersOnChange = (value, filterName) => {
     setFilters((oldFilters) => set(cloneDeep(oldFilters), filterName, value));
-
     url.searchParams.set(filterName, value);
     window.history.pushState(null, '', url.search);
   };
@@ -80,6 +79,7 @@ export const App = () => {
     url.search = '';
     setFilters(cloneDeep(defaultFilters));
   };
+
   return (
     <ChakraProvider theme={theme}>
       <Grid py='10' px='2'>

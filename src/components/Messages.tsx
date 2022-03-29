@@ -1,4 +1,4 @@
-import { ListItem, Box, Text, UnorderedList } from '@chakra-ui/react';
+import { ListItem, Text, UnorderedList, Flex, Image } from '@chakra-ui/react';
 import { DateTime } from 'luxon';
 
 type allMessages = {
@@ -13,6 +13,42 @@ type Message = {
   date: string;
 };
 
+const maxRating = 10;
+
+const activeRatingIndicator = (num: number) => {
+  let scoredRating = [];
+
+  for (let i = 0; i < num; i++) {
+    scoredRating[i] = i;
+  }
+
+  return scoredRating.map((num) => (
+    <Image
+      key={num}
+      w='15px'
+      h='15px'
+      src='https://img.icons8.com/material-sharp/344/star--v1.png'
+    />
+  ));
+};
+
+const notActiveRatingIndicator = (num: number) => {
+  let scoredNotActiveRating = [];
+
+  for (let i = 0; i < num; i++) {
+    scoredNotActiveRating[i] = i;
+  }
+
+  return scoredNotActiveRating.map((num) => (
+    <Image
+      key={num}
+      w='15px'
+      h='15px'
+      src='https://img.icons8.com/material-outlined/344/star--v2.png'
+    />
+  ));
+};
+
 export const Messages = ({ messages }: allMessages) => {
   const processedMessages = messages.map((message: Message) => {
     return {
@@ -22,15 +58,26 @@ export const Messages = ({ messages }: allMessages) => {
   });
 
   return (
-    <UnorderedList listStyleType='none' minW='50%' maxW='80%'>
-      <ListItem bgColor='lightblue'>
+    <UnorderedList listStyleType='none' minW='50%' maxW='70%'>
+      <ListItem>
         {processedMessages.map((message) => (
-          <Box key={message.id} marginBottom='5'>
-            <Text>{message.date}</Text>
+          <Flex
+            key={message.id}
+            flexDirection='column'
+            marginBottom='10'
+            rowGap='5px'
+          >
+            <Flex justifyContent='space-between'>
+              <Text>Date: {message.date}</Text>
+              <Text>by {message.author}</Text>
+            </Flex>
             <Text>{message.text}</Text>
-            <Text>{message.author}</Text>
-            <Text>Рейтинг {message.rating}</Text>
-          </Box>
+            <Flex alignItems='center' columnGap='5px'>
+              <Text>Rating:</Text>
+              {activeRatingIndicator(message.rating)}
+              {notActiveRatingIndicator(maxRating - message.rating)}
+            </Flex>
+          </Flex>
         ))}
       </ListItem>
     </UnorderedList>
