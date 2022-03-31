@@ -1,5 +1,6 @@
 import { ListItem, Text, UnorderedList, Flex, Image } from '@chakra-ui/react';
 import { DateTime } from 'luxon';
+import times from 'lodash/times';
 
 type allMessages = {
   messages: Message[];
@@ -13,41 +14,22 @@ type Message = {
   date: string;
 };
 
-const maxRating = 10;
-
-const activeRatingIndicator = (num: number) => {
-  let scoredRating = [];
-
-  for (let i = 0; i < num; i++) {
-    scoredRating[i] = i;
-  }
-
-  return scoredRating.map((num) => (
-    <Image
-      key={num}
-      w='15px'
-      h='15px'
-      src='https://img.icons8.com/material-sharp/344/star--v1.png'
-    />
-  ));
-};
-
-const notActiveRatingIndicator = (num: number) => {
-  let scoredNotActiveRating = [];
-
-  for (let i = 0; i < num; i++) {
-    scoredNotActiveRating[i] = i;
-  }
-
-  return scoredNotActiveRating.map((num) => (
-    <Image
-      key={num}
-      w='15px'
-      h='15px'
-      src='https://img.icons8.com/material-outlined/344/star--v2.png'
-    />
-  ));
-};
+const indicatorRating = (indicator: number) =>
+  times(5).map((index) => {
+    indicator--;
+    return (
+      <Image
+        key={index}
+        w='15px'
+        h='15px'
+        src={
+          indicator >= 0
+            ? 'https://img.icons8.com/material-sharp/344/star--v1.png'
+            : 'https://img.icons8.com/material-outlined/344/star--v2.png'
+        }
+      />
+    );
+  });
 
 export const Messages = ({ messages }: allMessages) => {
   const processedMessages = messages.map((message: Message) => {
@@ -74,8 +56,7 @@ export const Messages = ({ messages }: allMessages) => {
             <Text>{message.text}</Text>
             <Flex alignItems='center' columnGap='5px'>
               <Text>Rating:</Text>
-              {activeRatingIndicator(message.rating)}
-              {notActiveRatingIndicator(maxRating - message.rating)}
+              <Flex>{indicatorRating(message.rating)}</Flex>
             </Flex>
           </Flex>
         ))}

@@ -50,92 +50,82 @@ export const Filter = ({ filters, onChange, onResetFilters }: FiltersProps) => {
     date ? new Date(date) : null;
 
   return (
-    <Flex flexDirection='column' rowGap='10px'>
-      <Flex alignItems='end' maxW='85%' columnGap='10px' mx='auto'>
-        <label>
-          Search for comments
-          <Input
-            borderRadius='0'
-            border='solid 2px grey'
-            value={filters.query}
-            onChange={onChangeSearchInput}
-          />
-        </label>
-
-        <label>
-          Starting date
-          <Box
-            borderRadius='0'
-            border='solid 2px rgba(128,128,128,0.2)'
-            h='40px'
-          >
-            <DatePicker
-              dateFormat='dd.MM.yyyy'
-              selected={valueDateForDatePicker(filters.date.from)}
-              onChange={onChangeStartDateForFilter}
-            />
-          </Box>
-        </label>
-
-        <label>
-          End date
-          <Box
-            borderRadius='0'
-            border='solid 2px rgba(128,128,128,0.2)'
-            h='40px'
-          >
-            <DatePicker
-              dateFormat='dd.MM.yyyy'
-              selected={valueDateForDatePicker(filters.date.to)}
-              onChange={onChangeEndDateForFilter}
-            />
-          </Box>
-        </label>
-
-        <Select
-          onChange={onChangeSortingMethod}
-          border='2px solid grey'
+    <Flex columnGap='10px' alignItems='flex-end' w='85%'>
+      <label>
+        Search for comments
+        <Input
           borderRadius='0'
-          maxW='300px'
-        >
-          <option hidden>Sorting selection</option>
-          {sortingOptions.map((option) => (
-            <option key={option.key} value={option.filt}>
-              {option.label}
-            </option>
-          ))}
-        </Select>
-      </Flex>
+          border='solid 2px grey'
+          value={filters.query}
+          onChange={onChangeSearchInput}
+        />
+      </label>
 
-      <Flex columnGap='10px' justifyContent='center'>
-        <Box
-          border='2px solid rgba(128,128,128,0.2)'
-          position='relative'
-          w='100px'
-          _hover={{
-            bg: 'rgba(128,128,128,0.2)',
-          }}
-          onChange={handleCheckBoxClick}
-        >
-          <ArrowUpIcon position='absolute' top='0' left='0' w='100%' h='100%' />
-
-          <Checkbox
-            isChecked={filters.isAscOrder}
-            opacity='0'
-            w='100%'
-            h='36px'
+      <label>
+        Start date
+        <Box borderRadius='0' border='solid 2px rgba(128,128,128,0.2)' h='40px'>
+          <DatePicker
+            dateFormat='dd.MM.yyyy'
+            selected={valueDateForDatePicker(filters.date.from)}
+            onChange={onChangeStartDateForFilter}
           />
         </Box>
+      </label>
 
-        <Button
-          type='button'
-          onClick={onResetFilters}
-          bgColor='rgba(128,128,128,0.2)'
-          borderRadius='0'
-        >
-          Reset all filters
-        </Button>
-      </Flex>
+      <label>
+        End date
+        <Box borderRadius='0' border='solid 2px rgba(128,128,128,0.2)' h='40px'>
+          <DatePicker
+            dateFormat='dd.MM.yyyy'
+            selected={valueDateForDatePicker(filters.date.to)}
+            onChange={onChangeEndDateForFilter}
+          />
+        </Box>
+      </label>
+
+      <Select
+        onChange={onChangeSortingMethod}
+        border='2px solid grey'
+        borderRadius='0'
+        maxW='300px'
+      >
+        <option hidden>Sort selection</option>
+        {sortingOptions.map((option) => (
+          <option key={option.key} value={option.filt}>
+            {option.label}
+          </option>
+        ))}
+      </Select>
+
+      <Box
+        border='2px solid rgba(128,128,128,0.2)'
+        position='relative'
+        w='80px'
+        _hover={{
+          bg: 'rgba(128,128,128,0.2)',
+        }}
+        onChange={handleCheckBoxClick}
+      >
+        <ArrowUpIcon position='absolute' top='0' left='0' w='100%' h='100%' />
+
+        <Checkbox
+          isChecked={filters.isAscOrder}
+          opacity='0'
+          w='100%'
+          h='36px'
+        />
+      </Box>
+
+      <Button
+        type='button'
+        onClick={onResetFilters}
+        bgColor='rgba(128,128,128,0.2)'
+        borderRadius='0'
+        whiteSpace='normal'
+        fontSize='sm'
+      >
+        Reset all filters
+      </Button>
     </Flex>
   );
 };
