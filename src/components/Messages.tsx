@@ -14,16 +14,15 @@ type Message = {
   date: string;
 };
 
-const indicatorRating = (indicator: number) =>
-  times(5).map((index) => {
-    indicator--;
+const indicatorRating = (rating: number) =>
+  times(5, (index) => {
     return (
       <Image
         key={index}
         w='15px'
         h='15px'
         src={
-          indicator >= 0
+          index < rating
             ? 'https://img.icons8.com/material-sharp/344/star--v1.png'
             : 'https://img.icons8.com/material-outlined/344/star--v2.png'
         }
