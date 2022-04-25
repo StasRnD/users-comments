@@ -2,7 +2,9 @@ import React, { ComponentProps } from 'react';
 import { ChakraProvider, theme, VStack, Grid } from '@chakra-ui/react';
 import { Filter } from './Filter';
 import { Messages } from './Messages';
+import { Login } from './Login';
 import { allUsersMessages } from '../utils.js/constans';
+import { Route, Routes } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import orderBy from 'lodash/orderBy';
 import set from 'lodash/set';
@@ -75,7 +77,7 @@ export const App = () => {
     );
 
   const resetFilter = () => {
-    window.history.pushState(null, '', '/');
+    window.history.pushState(null, '', '/messages');
     url.search = '';
     setFilters(cloneDeep(defaultFilters));
   };
@@ -84,12 +86,23 @@ export const App = () => {
     <ChakraProvider theme={theme}>
       <Grid py='10' px='2'>
         <VStack spacing='10'>
-          <Filter
-            onChange={onChange}
-            filters={filters}
-            onResetFilters={resetFilter}
-          />
-          <Messages messages={messages} />
+          <Routes>
+            <Route
+              path='/messages'
+              element={
+                <>
+                  <Filter
+                    onChange={onChange}
+                    filters={filters}
+                    onResetFilters={resetFilter}
+                  />
+                  <Messages messages={messages} />
+                </>
+              }
+            />
+
+            <Route path='/' element={<Login />} />
+          </Routes>
         </VStack>
       </Grid>
     </ChakraProvider>

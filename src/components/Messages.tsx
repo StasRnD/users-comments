@@ -1,4 +1,5 @@
-import { ListItem, Text, UnorderedList, Flex, Image } from '@chakra-ui/react';
+import { ListItem, Text, UnorderedList, Flex } from '@chakra-ui/react';
+import { RatingImage } from './RatingImage';
 import { DateTime } from 'luxon';
 import times from 'lodash/times';
 
@@ -13,22 +14,6 @@ type Message = {
   author: string;
   date: string;
 };
-
-const indicatorRating = (rating: number) =>
-  times(5, (index) => {
-    return (
-      <Image
-        key={index}
-        w='15px'
-        h='15px'
-        src={
-          index < rating
-            ? 'https://img.icons8.com/material-sharp/344/star--v1.png'
-            : 'https://img.icons8.com/material-outlined/344/star--v2.png'
-        }
-      />
-    );
-  });
 
 export const Messages = ({ messages }: allMessages) => {
   const processedMessages = messages.map((message: Message) => {
@@ -55,7 +40,11 @@ export const Messages = ({ messages }: allMessages) => {
             <Text>{message.text}</Text>
             <Flex alignItems='center' columnGap='5px'>
               <Text>Rating:</Text>
-              <Flex>{indicatorRating(message.rating)}</Flex>
+              <Flex>
+                {times(5, (index) => (
+                  <RatingImage rating={message.rating} index={index} />
+                ))}
+              </Flex>
             </Flex>
           </Flex>
         ))}
