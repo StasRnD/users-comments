@@ -73,9 +73,7 @@ export const Messages = () => {
     );
 
   const resetFilter = () => {
-    const url = new URL(document.location.href);
-    window.history.pushState(null, '', `${url.pathname}`);
-
+    window.history.pushState(null, '', window.location.pathname);
     setFilters(cloneDeep(defaultFilters));
   };
 
