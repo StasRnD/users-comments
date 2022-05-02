@@ -1,38 +1,90 @@
-import { ListItem, Box, Text, UnorderedList } from '@chakra-ui/react';
+import React, { ComponentProps } from 'react';
+import { Filter } from './Filter';
+import { UserMessages } from './UserMessages';
+import { allUsersMessages } from '../utils.js/constans';
 import { DateTime } from 'luxon';
+import orderBy from 'lodash/orderBy';
+import set from 'lodash/set';
+import cloneDeep from 'lodash/cloneDeep';
 
-type allMessages = {
-  messages: Message[];
+export type Filters = {
+  query: string;
+  isAscOrder: boolean;
+  sortingField: 'date' | 'rating' | 'author';
+  date: {
+    from: string;
+    to: string;
+  };
 };
 
-type Message = {
-  id: number;
-  rating: number;
-  text: string;
-  author: string;
-  date: string;
+const defaultFilters = {
+  query: '',
+  isAscOrder: false,
+  sortingField: '' as Filters['sortingField'],
+  date: {
+    from: '',
+    to: '',
+  },
 };
 
-export const Messages = ({ messages }: allMessages) => {
-  const processedMessages = messages.map((message: Message) => {
+export const Messages = () => {
+  const [filters, setFilters] = React.useState(() => {
+    const url = new URL(document.location.href);
     return {
-      ...message,
-      date: DateTime.fromISO(message.date).toFormat('dd.MM.y'),
+      query: url.searchParams.get('query') || '',
+      isAscOrder: url.searchParams.get('isAscOrder') === 'true' ? true : false,
+      sortingField: '' as Filters['sortingField'],
+      date: {
+        from: url.searchParams.get('date.from') || '',
+        to: url.searchParams.get('date.to') || '',
+      },
     };
   });
 
+  type FiltersOnChange = ComponentProps<typeof Filter>['onChange'];
+  const onChange: FiltersOnChange = (value, filterName) => {
+    const url = new URL(document.location.href);
+    setFilters((oldFilters) => set(cloneDeep(oldFilters), filterName, value));
+    url.searchParams.set(filterName, value);
+    window.history.pushState(null, '', url.search);
+  };
+
+  const comparingTheMessageDateWithTheFilteringDates = (date: string) => {
+    const dateTime = DateTime.fromISO(date);
+
+    return (
+      dateTime >= DateTime.fromISO(filters.date.from) &&
+      dateTime <= DateTime.fromISO(filters.date.to)
+    );
+  };
+
+  const messages = orderBy(
+    allUsersMessages,
+    filters.sortingField,
+    filters.isAscOrder ? ['asc'] : ['desc']
+  )
+    .filter((message) =>
+      message.text.toLowerCase().includes(filters.query.toLowerCase())
+    )
+    .filter((message) =>
+      filters.date.from && filters.date.to
+        ? comparingTheMessageDateWithTheFilteringDates(message.date)
+        : message
+    );
+
+  const resetFilter = () => {
+    window.history.pushState(null, '', window.location.pathname);
+    setFilters(cloneDeep(defaultFilters));
+  };
+
   return (
-    <UnorderedList listStyleType='none' minW='50%' maxW='80%'>
-      <ListItem bgColor='lightblue'>
-        {processedMessages.map((message) => (
-          <Box key={message.id} marginBottom='5'>
-            <Text>{message.date}</Text>
-            <Text>{message.text}</Text>
-            <Text>{message.author}</Text>
-            <Text>Рейтинг {message.rating}</Text>
-          </Box>
-        ))}
-      </ListItem>
-    </UnorderedList>
+    <>
+      <Filter
+        onChange={onChange}
+        filters={filters}
+        onResetFilters={resetFilter}
+      />
+      <UserMessages messages={messages} />
+    </>
   );
 };
