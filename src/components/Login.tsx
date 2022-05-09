@@ -1,76 +1,69 @@
-import { useState } from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { Box, Input, Button, FormLabel, Flex, Heading } from '@chakra-ui/react';
-import set from 'lodash/set';
-import cloneDeep from 'lodash/cloneDeep';
-
-type UserInfo = {
-  email: string;
-  password: string;
-};
-
-type UserInfoProps = {
-  userInfo: UserInfo;
-  onChange: (value: string, inputName: string) => void;
-};
-
-const defaultUserInfo: UserInfo = {
-  email: '',
-  password: '',
-};
 
 export const Login = () => {
-  const [userInfo, setUserInfo] = useState(defaultUserInfo);
-  const userRegistration = (evt: any) => {
-    evt.preventDefault();
-    console.log(userInfo);
-    setUserInfo(defaultUserInfo);
-  };
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 1));
+    },
 
-  const onChange: UserInfoProps['onChange'] = (value, filterName) => {
-    setUserInfo((oldFilters) => set(cloneDeep(oldFilters), filterName, value));
-  };
-
-  const onChangeInputEmail: React.ChangeEventHandler<HTMLInputElement> = (
-    evt
-  ) => {
-    onChange(evt.target.value, 'email');
-  };
-
-  const onChangeInputPassword: React.ChangeEventHandler<HTMLInputElement> = (
-    evt
-  ) => {
-    onChange(evt.target.value, 'password');
-  };
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .required('Required')
+        .email('Format assumed ivan@mail.ru'),
+      password: Yup.string()
+        .min(8, 'Must be 8 characters or min')
+        .required('Required'),
+    }),
+  });
 
   return (
     <Box m='0' w='70%'>
       <Heading textAlign='center' marginBottom='10px'>
         Регистрация
       </Heading>
-      <form onSubmit={userRegistration}>
+      <form onSubmit={formik.handleSubmit}>
         <Flex flexDirection='column' w='50%' mx='auto'>
           <FormLabel htmlFor='email' m='0'>
             Введите email
           </FormLabel>
           <Input
-            value={userInfo.email}
-            onChange={onChangeInputEmail}
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             id='email'
+            name='email'
             type='email'
             placeholder='email'
-            marginBottom='20px'
           />
+          {formik.touched.email && formik.errors.email ? (
+            <Box color='red' marginBottom='20px'>
+              {formik.errors.email}
+            </Box>
+          ) : null}
+
           <FormLabel htmlFor='password' m='0'>
             Введите пароль
           </FormLabel>
           <Input
-            value={userInfo.password}
-            onChange={onChangeInputPassword}
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             id='password'
+            name='password'
             type='password'
             placeholder='password'
-            marginBottom='20px'
           />
+          {formik.touched.password && formik.errors.password ? (
+            <Box color='red' marginBottom='20px'>
+              {formik.errors.password}
+            </Box>
+          ) : null}
           <Button type='submit' w='80%' mx='auto' marginTop='50px'>
             Зарегестрироваться
           </Button>
