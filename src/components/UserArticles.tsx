@@ -3,11 +3,11 @@ import { RatingImage } from './RatingImage';
 import { DateTime } from 'luxon';
 import times from 'lodash/times';
 
-type allMessages = {
-  messages: Message[];
+type allArticles = {
+  articles: Article[];
 };
 
-type Message = {
+type Article = {
   id: number;
   rating: number;
   text: string;
@@ -15,35 +15,35 @@ type Message = {
   date: string;
 };
 
-export const UserMessages = ({ messages }: allMessages) => {
-  const processedMessages = messages.map((message: Message) => {
+export const UserArticles = ({ articles }: allArticles) => {
+  const processedArticles = articles.map((article: Article) => {
     return {
-      ...message,
-      date: DateTime.fromISO(message.date).toFormat('dd.MM.y'),
+      ...article,
+      date: DateTime.fromISO(article.date).toFormat('dd.MM.y'),
     };
   });
 
   return (
     <UnorderedList listStyleType='none' minW='50%' maxW='70%'>
       <ListItem>
-        {processedMessages.map((message) => (
+        {processedArticles.map((article) => (
           <Flex
-            key={message.id}
+            key={article.id}
             flexDirection='column'
             marginBottom='10'
             rowGap='5px'
           >
             <Flex justifyContent='space-between'>
-              <Text>Дата {message.date}</Text>
-              <Text>{message.author}</Text>
+              <Text>Дата {article.date}</Text>
+              <Text>{article.author}</Text>
             </Flex>
-            <Text>{message.text}</Text>
+            <Text>{article.text}</Text>
             <Flex alignItems='center' columnGap='5px'>
               <Text>Рейтинг:</Text>
               <Flex>
                 {times(5, (index) => (
                   <RatingImage
-                    isActiveRating={index < message.rating ? true : false}
+                    isActiveRating={index < article.rating ? true : false}
                     key={index}
                   />
                 ))}

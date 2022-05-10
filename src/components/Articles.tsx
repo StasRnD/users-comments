@@ -1,7 +1,7 @@
 import React, { ComponentProps } from 'react';
 import { Filter } from './Filter';
-import { UserMessages } from './UserMessages';
-import { allUsersMessages } from '../utils.js/constans';
+import { UserArticles } from './UserArticles';
+import { allUsersArticles } from '../utils.js/constans';
 import { DateTime } from 'luxon';
 import orderBy from 'lodash/orderBy';
 import set from 'lodash/set';
@@ -27,7 +27,7 @@ const defaultFilters = {
   },
 };
 
-export const Messages = () => {
+export const Articles = () => {
   const [filters, setFilters] = React.useState(() => {
     const url = new URL(document.location.href);
     return {
@@ -49,7 +49,7 @@ export const Messages = () => {
     window.history.pushState(null, '', url.search);
   };
 
-  const comparingTheMessageDateWithTheFilteringDates = (date: string) => {
+  const comparingTheArticleDateWithTheFilteringDates = (date: string) => {
     const dateTime = DateTime.fromISO(date);
 
     return (
@@ -58,18 +58,18 @@ export const Messages = () => {
     );
   };
 
-  const messages = orderBy(
-    allUsersMessages,
+  const articles = orderBy(
+    allUsersArticles,
     filters.sortingField,
     filters.isAscOrder ? ['asc'] : ['desc']
   )
-    .filter((message) =>
-      message.text.toLowerCase().includes(filters.query.toLowerCase())
+    .filter((articles) =>
+      articles.text.toLowerCase().includes(filters.query.toLowerCase())
     )
-    .filter((message) =>
+    .filter((articles) =>
       filters.date.from && filters.date.to
-        ? comparingTheMessageDateWithTheFilteringDates(message.date)
-        : message
+        ? comparingTheArticleDateWithTheFilteringDates(articles.date)
+        : articles
     );
 
   const resetFilter = () => {
@@ -84,7 +84,7 @@ export const Messages = () => {
         filters={filters}
         onResetFilters={resetFilter}
       />
-      <UserMessages messages={messages} />
+      <UserArticles articles={articles} />
     </>
   );
 };
