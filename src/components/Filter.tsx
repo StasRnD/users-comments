@@ -59,9 +59,9 @@ export const Filter = ({ filters, onChange, onResetFilters }: FiltersProps) => {
     date ? new Date(date) : null;
 
   return (
-    <Flex columnGap='10px' alignItems='flex-end' w='85%'>
+    <Flex columnGap='10px' alignItems='flex-end' justifyContent='center'>
       <label>
-        Query
+        Поиск
         <Input
           borderRadius='0'
           border='solid 2px grey'
@@ -71,7 +71,7 @@ export const Filter = ({ filters, onChange, onResetFilters }: FiltersProps) => {
       </label>
 
       <label>
-        Start date
+        Начальная дата
         <Box borderRadius='0' border='solid 2px rgba(128,128,128,0.2)' h='40px'>
           <DatePicker
             dateFormat='dd.MM.yyyy'
@@ -82,7 +82,7 @@ export const Filter = ({ filters, onChange, onResetFilters }: FiltersProps) => {
       </label>
 
       <label>
-        End date
+        Конечная дата
         <Box borderRadius='0' border='solid 2px rgba(128,128,128,0.2)' h='40px'>
           <DatePicker
             dateFormat='dd.MM.yyyy'
@@ -98,7 +98,7 @@ export const Filter = ({ filters, onChange, onResetFilters }: FiltersProps) => {
         borderRadius='0'
         maxW='300px'
       >
-        <option hidden>Sort selection</option>
+        <option hidden>Метод сортировки</option>
         {sortingOptions.map((option) => (
           <option key={option.key} value={option.filt}>
             {option.label}
@@ -133,7 +133,7 @@ export const Filter = ({ filters, onChange, onResetFilters }: FiltersProps) => {
         whiteSpace='normal'
         fontSize='sm'
       >
-        Reset
+        Сбросить
       </Button>
     </Flex>
   );

@@ -34,12 +34,12 @@ export const UserMessages = ({ messages }: allMessages) => {
             rowGap='5px'
           >
             <Flex justifyContent='space-between'>
-              <Text>Date: {message.date}</Text>
-              <Text>by {message.author}</Text>
+              <Text>Дата {message.date}</Text>
+              <Text>{message.author}</Text>
             </Flex>
             <Text>{message.text}</Text>
             <Flex alignItems='center' columnGap='5px'>
-              <Text>Rating:</Text>
+              <Text>Рейтинг:</Text>
               <Flex>
                 {times(5, (index) => (
                   <RatingImage
