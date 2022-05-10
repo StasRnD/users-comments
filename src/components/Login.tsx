@@ -14,20 +14,20 @@ export const Login = () => {
 
     validationSchema: Yup.object({
       email: Yup.string()
-        .required('Required')
-        .email('Format assumed ivan@mail.ru'),
+        .required('Поле обязательно для заполнения')
+        .email('Ожидаемый формат email: Ivan@mail.ru'),
       password: Yup.string()
-        .min(8, 'Must be 8 characters or min')
-        .required('Required'),
+        .min(8, 'Пароль должен содержать не менее 8 символов')
+        .required('Поле обязательно для заполнения'),
     }),
   });
 
   return (
     <Box m='0' w='70%'>
       <Heading textAlign='center' marginBottom='10px'>
-        Регистрация
+        Авторизация
       </Heading>
-      <form onSubmit={formik.handleSubmit}>
+      <form onSubmit={formik.handleSubmit} noValidate>
         <Flex flexDirection='column' w='50%' mx='auto'>
           <FormLabel htmlFor='email' m='0'>
             Введите email
@@ -65,7 +65,7 @@ export const Login = () => {
             </Box>
           ) : null}
           <Button type='submit' w='80%' mx='auto' marginTop='50px'>
-            Зарегестрироваться
+            Войти
           </Button>
         </Flex>
       </form>
