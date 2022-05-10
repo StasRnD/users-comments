@@ -57,7 +57,7 @@ export const Login = () => {
             id='password'
             name='password'
             type='password'
-            placeholder='password'
+            placeholder='Пароль'
           />
           {formik.touched.password && formik.errors.password ? (
             <Box color='red' marginBottom='20px'>
