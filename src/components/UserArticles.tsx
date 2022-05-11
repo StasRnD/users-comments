@@ -1,4 +1,5 @@
 import { ListItem, Text, UnorderedList, Flex } from '@chakra-ui/react';
+import { Comments } from './Comments';
 import { RatingImage } from './RatingImage';
 import { DateTime } from 'luxon';
 import times from 'lodash/times';
@@ -25,33 +26,33 @@ export const UserArticles = ({ articles }: allArticles) => {
 
   return (
     <UnorderedList listStyleType='none' minW='50%' maxW='70%'>
-      <ListItem>
-        {processedArticles.map((article) => (
-          <Flex
-            key={article.id}
-            flexDirection='column'
-            marginBottom='10'
-            rowGap='5px'
-          >
-            <Flex justifyContent='space-between'>
-              <Text>Дата {article.date}</Text>
-              <Text>{article.author}</Text>
-            </Flex>
-            <Text>{article.text}</Text>
-            <Flex alignItems='center' columnGap='5px'>
-              <Text>Рейтинг:</Text>
-              <Flex>
-                {times(5, (index) => (
-                  <RatingImage
-                    isActiveRating={index < article.rating ? true : false}
-                    key={index}
-                  />
-                ))}
-              </Flex>
+      {processedArticles.map((article) => (
+        <ListItem
+          key={article.id}
+          display='flex'
+          flexDirection='column'
+          marginBottom='10'
+          rowGap='5px'
+        >
+          <Flex justifyContent='space-between'>
+            <Text>Дата {article.date}</Text>
+            <Text>{article.author}</Text>
+          </Flex>
+          <Text>{article.text}</Text>
+          <Flex alignItems='center' columnGap='5px'>
+            <Text>Рейтинг:</Text>
+            <Flex>
+              {times(5, (index) => (
+                <RatingImage
+                  isActiveRating={index < article.rating ? true : false}
+                  key={index}
+                />
+              ))}
             </Flex>
           </Flex>
-        ))}
-      </ListItem>
+          <Comments />
+        </ListItem>
+      ))}
     </UnorderedList>
   );
 };
