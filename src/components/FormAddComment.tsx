@@ -18,7 +18,7 @@ const validationObj = Yup.object({
     .required('Поле обязательно для заполнения'),
 });
 
-type Comments = {
+type CommentProps = {
   id: string;
   name: string;
   text: string;
@@ -26,8 +26,8 @@ type Comments = {
 
 type CommentsProps = {
   onAddComment: () => void;
-  userComments: Comments[];
-  setUserComments: (userComments: Comments[]) => void;
+  userComments: CommentProps[];
+  setUserComments: (userComments: CommentProps[]) => void;
 };
 
 export const FormAddComment = ({
