@@ -1,4 +1,4 @@
-const allUsersMessages = [
+const allUsersArticles = [
     {
         id: 1,
         rating: 2,
@@ -56,4 +56,4 @@ const sortingOptions = [
 
   
 
-  export { sortingOptions, allUsersMessages }
+  export { sortingOptions, allUsersArticles }
