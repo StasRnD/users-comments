@@ -10,9 +10,7 @@ export const App = () => {
       <Grid py='10' px='2'>
         <VStack spacing='10'>
           <Routes>
-            <Route path='/messages' element={<Messages />} />
-            <Route path='/registration' element={<Registration />} />
-            <Route path='/login' element={<Login />} />
+            <Route path='/' element={<Messages />} />
           </Routes>
         </VStack>
       </Grid>
